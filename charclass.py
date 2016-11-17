@@ -1,5 +1,44 @@
 import pygame
 from PIL import Image
+import random
+
+class Map:
+	def __init__(self):
+		self.nooftrees=random.randint(10,15)
+		self.treelocs=[]
+		self.imgs=[None]*400
+		for i in range(self.nooftrees):
+			self.treelocs.append((random.randint(0,20),random.randint(0,20)))
+		self.initmap()
+	def checkcollision(self,(x,y)):
+		x=x/50
+		y=y/50
+		if (x,y) in treelocs:
+			return True
+		return False
+	def loadimg(self,file):
+		image=pygame.image.load(file).convert()
+		return image
+	def initmap(self):
+		x=0
+		for i in range(20):
+			for j in range(20):
+				if (i,j) in self.treelocs:
+					self.imgs[x]=self.loadimg("Images/tree.png")
+				else:
+					self.imgs[x]=self.loadimg("Images/ground.png")
+				x+=1
+	def blitmap(self,wind):
+		i=0
+		j=0
+		x=0
+		while i<1000:
+			while j<1000:
+				wind.blit(self.imgs[x],[i,j])
+				x+=1
+				j+=50
+			i+=50
+			j=0
 class Goku:
 	def getImgLib(self,file):
 		lib=[]
@@ -16,10 +55,12 @@ class Goku:
 		self.dx=0
 		self.dy=0
 		self.curpic=1
+		self.nextpic=""
 		self.uppic=2
 		self.downpic=1
 		self.rpic=3
 		self.lpic=4
+		self.ppic=0
 		self.window=window
 		self.window.blit(self.image_lib[1],(x,y))
 
@@ -66,6 +107,10 @@ class Goku:
 					self.state="RIGHT"
 					self.curpic=self.rpic
 				self.dx=10
+			#if evt.key == pygame.K_g:#PUNCHING
+			#	if self.state==None:
+			#		self.curpic=self.ppic
+			#	self.state="PUNCH"
 		elif evt.type == pygame.KEYUP:
 			if evt.key == pygame.K_w:
 				if self.state=="UP":
