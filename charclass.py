@@ -28,9 +28,12 @@ class Map:#Generates a map with a random number of trees at random locations
 			return True
 		return False
 	def loadimg(self,file):#loads the spawnable images(50X50)
-		image=pygame.image.load(file).convert()
+		if 'tree' in file:
+			image=pygame.image.load(file).convert_alpha()
+		else:
+			image=pygame.image.load(file).convert()
 		return image
-	def initmap(self):#Uses images to spawn the map
+	def initmap(self):#Uses images to spawn the map(as a list)
 		x=0
 		for i in range(20):
 			for j in range(20):
@@ -45,8 +48,7 @@ class Map:#Generates a map with a random number of trees at random locations
 		x=0
 		while i<1000:
 			while j<1000:
-				if (i/50,j/50) not in self.treelocs:
-					wind.blit(self.imgs[x],[i,j])
+				wind.blit(self.loadimg("Images/ground.png"),[i,j])
 				x+=1
 				j+=50
 			i+=50
