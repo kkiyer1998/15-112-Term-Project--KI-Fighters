@@ -12,20 +12,35 @@ font=pygame.font.SysFont(None,25)
 def message(msg):
 	text=font.render(msg,True,white)
 	gameDisplay.blit(text,(300,300))
-gk=Goku(gameDisplay,100,100)
 map1=Map()
+gk=Goku(gameDisplay,100,100,map1)
 while not gameExit:
+	if gk.Map.checkcollision((gk.X+gk.dx,gk.Y+gk.dy)):
+		if gk.state=="UP" or gk.state=="DOWN":
+			gk.dy=-gk.dy
+			gk.Y+=gk.dy
+			gk.X+=gk.dx
+			gk.dy=-gk.dy
+		elif gk.state=="LEFT" or gk.state=="RIGHT":
+			gk.dx=-gk.dx
+			gk.Y+=gk.dy
+			gk.X+=gk.dx
+			gk.dx=-gk.dx
+		gk.state=None
+	else:
+		gk.Y+=gk.dy
+		gk.X+=gk.dx
 	gameDisplay.fill(white)
 	map1.blitmap(gameDisplay)
 	message("Sup Doodes This game is far from done")
 	gk.update()
-	gk.X+=gk.dx
-	gk.Y+=gk.dy
+	map1.blittrees(gameDisplay)
+	gk.animate()
 	for evt in pygame.event.get():
 		if evt.type == pygame.QUIT:
 			gameExit=True
 		gk.Move(evt)
-	clock.tick(13)
+	clock.tick(8)
 	pygame.display.flip()
 	
 
