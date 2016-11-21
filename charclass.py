@@ -89,8 +89,14 @@ class Goku:
 		self.rpic=19
 		self.lpic=20
 		self.ppic=0
+		self.uppunch=46
+		self.downpunch=45
+		self.rpunch=47
+		self.lpunch=48
 		self.window=window
 		self.window.blit(self.image_lib[1],(x,y))
+		self.dx1=0
+		self.dy1=0
 		if player==1:
 			self.up=pygame.K_w
 			self.down=pygame.K_s
@@ -103,8 +109,8 @@ class Goku:
 			self.down=pygame.K_DOWN
 			self.left=pygame.K_LEFT
 			self.right=pygame.K_RIGHT
-			self.punch=pygame.K_QUESTION
-			self.ki=pygame.K_GREATER
+			self.punch=pygame.K_GREATER
+			self.ki=pygame.K_QUESTION
 
 	def checkcollision(self,x,y):
 		if (x>self.X and x<self.X+32) and (y>self.Y and y<self.Y+32):
@@ -112,7 +118,7 @@ class Goku:
 	def update(self):
 		self.window.blit(self.image_lib[self.curpic],(self.X,self.Y))
 	def animate(self):#Called every frame
-		if self.state!=None:
+		if self.state!=None and self.state!="PUNCH":
 			if self.curpic>36:
 				if self.state=="UP":
 					self.curpic=self.uppic
@@ -123,6 +129,29 @@ class Goku:
 				elif self.state=="LEFT":
 					self.curpic=self.lpic
 			self.curpic+=4
+		elif self.state=="PUNCH":
+			self.curpic+=4
+			if self.curpic>=53:
+				self.dx=self.dx1
+				self.dy=self.dy1
+				self.state=self.state1
+				if self.state=="UP":
+					self.curpic=self.uppic
+				elif self.state=="DOWN":
+					self.curpic=self.downpic
+				elif self.state=="RIGHT":
+					self.curpic=self.rpic
+				elif self.state=="LEFT":
+					self.curpic=self.lpic
+				elif self.state==None:
+					if self.curpic==53:
+						self.curpic=self.downpic
+					elif self.curpic==54:
+						self.curpic=self.uppic
+					elif self.curpic==55:
+						self.curpic=self.rpic
+					elif self.curpic==56:
+						self.curpic=self.lpic
 	def Move(self,evt):
 		if evt.type == pygame.KEYDOWN:
 			if evt.key == self.up:
@@ -153,10 +182,40 @@ class Goku:
 				else:
 					self.state1="RIGHT"
 				self.dx=10
-			#if evt.key == pygame.K_g:#PUNCHING
-			#	if self.state==None:
-			#		self.curpic=self.ppic
-			#	self.state="PUNCH"
+			if evt.key == self.punch:
+				self.dx1=self.dx
+				self.dy1=self.dy
+				self.dx=0
+				self.dy=0
+				if self.state==None:
+					self.state1=None
+					self.state="PUNCH"
+					if self.curpic==self.uppic:
+						self.curpic=self.uppunch	
+					elif self.curpic==self.downpic:
+						self.curpic=self.downpunch
+					elif self.curpic==self.lpic:
+						self.curpic=self.lpunch
+					elif self.curpic==self.rpic:
+						self.curpic=self.rpunch
+
+				if self.state == "UP":
+					self.curpic=self.uppunch
+					self.state1=self.state
+					self.state = "PUNCH"
+				elif self.state=="DOWN":
+					self.curpic=self.downpunch
+					self.state1=self.state
+					self.state = "PUNCH"
+				elif self.state=="LEFT":
+					self.curpic=self.lpunch
+					self.state1=self.state
+					self.state = "PUNCH"
+				elif self.state=="RIGHT":
+					self.curpic=self.rpunch
+					self.state1=self.state
+					self.state = "PUNCH"
+
 		elif evt.type == pygame.KEYUP:
 			if evt.key == self.up:
 				if self.state=="UP":
