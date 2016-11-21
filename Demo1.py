@@ -13,33 +13,52 @@ def message(msg):
 	text=font.render(msg,True,white)
 	gameDisplay.blit(text,(300,300))
 map1=Map()
-gk=Goku(gameDisplay,100,100,map1)
+char1=Goku(gameDisplay,100,100,map1,1)
+char2=Goku(gameDisplay,200,200,map1,2)
 while not gameExit:
-	if gk.Map.checkcollision((gk.X+gk.dx,gk.Y+gk.dy)):
-		if gk.state=="UP" or gk.state=="DOWN":
-			gk.dy=-gk.dy
-			gk.Y+=gk.dy
-			gk.X+=gk.dx
-			gk.dy=-gk.dy
-		elif gk.state=="LEFT" or gk.state=="RIGHT":
-			gk.dx=-gk.dx
-			gk.Y+=gk.dy
-			gk.X+=gk.dx
-			gk.dx=-gk.dx
-		gk.state=None
+	if char2.Map.checkcollision((char2.X+char2.dx,char2.Y+char2.dy)):
+		if char2.state=="UP" or char2.state=="DOWN":
+			char2.dy=-char2.dy
+			char2.Y+=char2.dy
+			char2.X+=char2.dx
+			char2.dy=-char2.dy
+		elif char2.state=="LEFT" or char2.state=="RIGHT":
+			char2.dx=-char2.dx
+			char2.Y+=char2.dy
+			char2.X+=char2.dx
+			char2.dx=-char2.dx
+		char2.state=None
 	else:
-		gk.Y+=gk.dy
-		gk.X+=gk.dx
+		char2.Y+=char2.dy
+		char2.X+=char2.dx
+	if char1.Map.checkcollision((char1.X+char1.dx,char1.Y+char1.dy)):
+		if char1.state=="UP" or char1.state=="DOWN":
+			char1.dy=-char1.dy
+			char1.Y+=char1.dy
+			char1.X+=char1.dx
+			char1.dy=-char1.dy
+		elif char1.state=="LEFT" or char1.state=="RIGHT":
+			char1.dx=-char1.dx
+			char1.Y+=char1.dy
+			char1.X+=char1.dx
+			char1.dx=-char1.dx
+		char1.state=None
+	else:
+		char1.Y+=char1.dy
+		char1.X+=char1.dx
 	gameDisplay.fill(white)
 	map1.blitmap(gameDisplay)
 	message("Sup Doodes This game is far from done")
-	gk.update()
+	char1.update()
+	char2.update()
 	map1.blittrees(gameDisplay)
-	gk.animate()
+	char2.animate()
+	char1.animate()
 	for evt in pygame.event.get():
 		if evt.type == pygame.QUIT:
 			gameExit=True
-		gk.Move(evt)
+		char1.Move(evt)
+		char2.Move(evt)
 	clock.tick(8)
 	pygame.display.flip()
 	
