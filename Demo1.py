@@ -1,6 +1,7 @@
 import pygame
 from charclass import *
 pygame.init()
+kiblast=pygame.image.load("Images/ki.gif.png").convert_alpha()
 white = [255,255,255]
 gameDisplay = pygame.display.set_mode((1000,1000))
 pygame.display.set_caption("DEMO 1")
@@ -48,12 +49,13 @@ while not gameExit:
 		else:
 			char1.Y+=char1.dy
 			char1.X+=char1.dx
+                        
 		gameDisplay.fill(white)
 		map1.blitmap(gameDisplay)
-		message("Sup Doodes This game is far from done")
 		char1.update()
 		char2.update()
-		map1.blittrees(gameDisplay)
+		map1.blitobstacles(gameDisplay)
+		message("Maimoon is da boss B) and Nahin is bae")
 		char2.animate()
 		char1.animate()
 		for evt in pygame.event.get():
