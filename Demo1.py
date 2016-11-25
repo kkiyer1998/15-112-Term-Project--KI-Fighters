@@ -1,7 +1,7 @@
 import pygame
 from charclass import *
 pygame.init()
-kiblast=pygame.image.load("Images/ki.gif.png").convert_alpha()
+
 white = [255,255,255]
 gameDisplay = pygame.display.set_mode((1000,1000))
 pygame.display.set_caption("DEMO 1")

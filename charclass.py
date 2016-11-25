@@ -1,4 +1,4 @@
-
+#KKIYER@ANDREW.CMU.EDU#
 ####################################################################################
 ############################IMPORTING USED MODULES##################################
 ####################################################################################
@@ -15,7 +15,7 @@ import random
 
 
 #### My map is basically a 20X20 grid of 50X50 px per part.
-# It consists of trees in addition that are spawned in a random
+# It consists of trees in addition that are spawned at a random
 # number in random places(grid locations). These trees are, of course
 # Non-collideable, and a function handles it with an object location
 # and the set of grid co-ordinates of the trees(defined in init) 
@@ -28,6 +28,8 @@ class Map:#Generates a map with a random number of trees at random locations
 			self.treelocs.append((random.randint(0,20),random.randint(0,20)))
 		self.initmap()
 	def checkcollision(self,(x,y)):#For collision handling
+                if x>1000 or x<0 or y>1000 or y<0:
+                        return True
 		x=x/50
 		y=y/50
 		if (x,y) in self.treelocs:
