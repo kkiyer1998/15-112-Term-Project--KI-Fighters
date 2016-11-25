@@ -380,3 +380,20 @@ class Goku:
 
 					self.state1 = None
 				self.dx = 0
+class Ki:
+        def __init__(self,x,y,direc):
+                self.x = x
+                self.y = y
+                self.dx = 0
+                self.dy = 0
+                if direc == "UP":
+                        self.dy = -15
+                elif direc == "DOWN":
+                        self.dy = 15
+                elif direc == "RIGHT":
+                        self.dx = 15
+                else:
+                        self.dx = -15
+                
+                
+                

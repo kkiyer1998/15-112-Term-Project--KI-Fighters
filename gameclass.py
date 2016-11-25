@@ -12,6 +12,7 @@ class MainGame:
         
 
         #Main Menu related stuff
+        self.mainloop = True
         self.inmenu = True
         self.ininstr = False
         self.instart = False
@@ -29,9 +30,11 @@ class MainGame:
         self.instructions = self.buttonimg
         self.quit = self.buttonimg
         self.back = self.buttonimg
+        self.goku = self.buttonimg
+        self.vegeta = self.buttonimg
         self.curplayer = 0
-        self.player1choice = None
-        self.player2choice = None
+        self.player1 = None
+        self.player2 = None
         
         
         self.font = pygame.font.SysFont(None,25)
@@ -79,59 +82,52 @@ class MainGame:
         elif self.instart:
             if x > 400 and x < 600:
                 if y > 600 and y <650:
-                    if self.start == self.buttonimg:
+                    if self.goku == self.buttonimg:
                         self.buttonhover.play()
-                    self.start = self.litbuttonimg
+                    self.goku = self.litbuttonimg
                 elif y > 680 and y < 730:
-                    if self.back == self.buttonimg:
+                    if self.vegeta == self.buttonimg:
                         self.buttonhover.play()
-                    self.back = self.litbuttonimg
+                    self.vegeta = self.litbuttonimg
                 else:
-                    if self.back == self.litbuttonimg or self.start == self.litbuttonimg:
+                    if self.vegeta == self.litbuttonimg or self.goku == self.litbuttonimg:
                         self.buttonhover.play()
-                    self.back = self.buttonimg
-                    self.start = self.buttonimg
+                    self.goku = self.buttonimg
+                    self.vegeta = self.buttonimg
 
     # from- http://www.pygame.org/wiki/TextWrap
     def drawText(self,surface, text, color, rect, font, aa=False, bkg=None):
         rect = pygame.Rect(rect)
         y = rect.top
         lineSpacing = -2
-     
         # get the height of the font
         fontHeight = font.size("Tg")[1]
-     
         while text:
             i = 1
-     
             # determine if the row of text will be outside our area
             if y + fontHeight > rect.bottom:
                 break
-     
             # determine maximum width of line
             while font.size(text[:i])[0] < rect.width and i < len(text):
                 i += 1
-     
             # if we've wrapped the text, then adjust the wrap to the last word      
             if i < len(text): 
                 i = text.rfind(" ", 0, i) + 1
-     
             # render the line and blit it to the surface
             if bkg:
                 image = font.render(text[:i], 1, color, bkg)
                 image.set_colorkey(bkg)
             else:
                 image = font.render(text[:i], aa, color)
-     
             surface.blit(image, (rect.left, y))
             y += fontHeight + lineSpacing
-     
             # remove the text we just blitted
             text = text[i:]
-     
         return text
 
-    def openit(self,(x,y),awesome):
+    
+
+    def openit(self,(x,y)):
         if self.inmenu:
             if x > 400 and x < 600:
                 if y > 300 and y < 350:
@@ -141,7 +137,7 @@ class MainGame:
                     self.inmenu = False
                     self.ininstr = True
                 elif y > 500 and y < 550:
-                    pygame.mixer.quit()
+                    self.mainloop = False
                     pygame.quit()
                     quit()
                     
@@ -153,22 +149,31 @@ class MainGame:
         elif self.instart:
             if x > 400 and x < 600:
                 if y > 600 and y <650:
-                    awesome = False
+                    if self.curplayer == 0:
+                        self.player1 = "Goku"
+                        self.curplayer += 1
+                    elif self.curplayer == 1:
+                        self.player2 = "Goku"
+                        self.mainloop = False
                 elif y > 680 and y < 730:
-                    self.instart = False
-                    self.inmenu = True
+                    if self.curplayer == 0:
+                        self.player1 = "Vegeta"
+                        self.curplayer += 1
+                    elif self.curplayer == 1:
+                        self.player2 = "Vegeta"
+                        self.mainloop = False
 
-            
+    def getchars(self):
+        return (self.player1,self.player2)
 
 
                 
     def menuloop(self):
         black = [0,0,0]
-        awesome = True
         if not pygame.mixer.get_busy():
             print "YO"
             self.introsound.play()
-        while awesome:
+        while self.mainloop:
             if not pygame.mixer.get_busy():
                 print "YO"
                 self.introsound.play()
@@ -200,7 +205,7 @@ class MainGame:
                         pygame.quit()
                         quit()
                     if evt.type == pygame.MOUSEBUTTONUP:
-                        self.openit(evt.pos,awesome)
+                        self.openit(evt.pos)
                 self.clock.tick(60)
                 pygame.display.flip()
 
@@ -222,9 +227,9 @@ class MainGame:
                         self.lightitup(evt.pos)
                     if evt.type == pygame.QUIT  or  (evt.type == pygame.KEYDOWN and evt.key == pygame.K_ESCAPE):
                         self.ininstr = False
-                        awesome = False
+                        self.mainloop = False
                     if evt.type == pygame.MOUSEBUTTONUP:
-                        self.openit(evt.pos,awesome)
+                        self.openit(evt.pos)
 
                 self.clock.tick(60)
                 pygame.display.flip()
@@ -237,39 +242,28 @@ class MainGame:
                 pygame.display.set_caption(str(self.clock.get_fps()))
                 self.gamedisplay.fill(black)
                 self.gamedisplay.blit(self.menuimg,(self.menux,self.menuy))
-                self.gamedisplay.blit(self.start,(400,600))
-                self.gamedisplay.blit(self.back,(400,680))
+                self.gamedisplay.blit(self.goku,(400,600))
+                self.gamedisplay.blit(self.vegeta,(400,680))
                 fnt = pygame.font.SysFont(None,40)
                 text = fnt.render("Choose Your Player- Player "+ str(self.curplayer+1),True,[255,0,0])
                 self.gamedisplay.blit(text,(350,200))
                 
-                self.message("!Start!",475,615)
-                self.message("Back",480,695)
+                self.message("Goku",475,615)
+                self.message("Vegeta",480,695)
                 for evt in pygame.event.get():
                     if evt.type == pygame.MOUSEMOTION:
                         self.lightitup(evt.pos)
                     if evt.type == pygame.QUIT  or  (evt.type == pygame.KEYDOWN and evt.key == pygame.K_ESCAPE):
                         self.instart = False
-                        awesome = False
+                        self.mainloop = False
                     if evt.type == pygame.MOUSEBUTTONUP:
-                        self.openit(evt.pos,awesome)
+                        self.openit(evt.pos)
 
 
                 self.clock.tick(60)
                 pygame.display.flip()
-
+        pygame.mixer.quit()
 
             
 
         return None
-g=MainGame()
-g.menuloop()
-print "I'm out"
-pygame.mixer.quit()
-pygame.quit()
-quit()
-
-				
-			
-			
-		
