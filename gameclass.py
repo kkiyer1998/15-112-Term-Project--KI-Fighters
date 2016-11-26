@@ -1,9 +1,17 @@
+##############################################################################
+##############################################################################
+##########################  MAIN MENU CLASS DEFS  ############################
+##############################################################################
+##############################################################################
+
+###########################  IMPORTING MODULES  ##############################
 import pygame
 from charclass import *
 pygame.init()
 pygame.mixer.init()
+##############################################################################
 
-
+################################ CLASS DEFS ##################################
 class MainGame:
     def __init__(self):
         #Window, time, sound, and other important stuff
@@ -22,7 +30,8 @@ class MainGame:
         self.menudx = -10
         self.menudy = -10
         self.textbox = None
-        
+
+        #BUTTONS AND CHOICES
         self.buttonimg = pygame.image.load("Images/button.png").convert()
         self.litbuttonimg = pygame.image.load("Images/buttonlit.png").convert()
         self.startgame = self.buttonimg
@@ -36,7 +45,7 @@ class MainGame:
         self.player1 = None
         self.player2 = None
         
-        
+        #SOUND AND TEXT
         self.font = pygame.font.SysFont(None,25)
         self.font1 = pygame.font.SysFont(None,40)
         self.introsound = pygame.mixer.Sound(file="Sounds/Intro.wav")
@@ -44,11 +53,11 @@ class MainGame:
         self.buttonhover = pygame.mixer.Sound(file="Sounds/Button.wav")
 
 
-    def message(self,msg,x,y):
-        text=self.font.render(msg,True,[255,0,0])
+    def message(self,msg,x,y):#DISPLAYS TEXT ON A SCREEN(FOR BUTTONS)
+        text=self.font.render(msg,True,[0,0,0])
         self.gamedisplay.blit(text,(x,y))
             
-    def lightitup(self,(x,y)):
+    def lightitup(self,(x,y)):#LIGHTS UP BUTTONS ON HOVER
         if self.inmenu:
             if x > 400 and x < 600:
                 if y > 300 and y < 350:
@@ -126,7 +135,7 @@ class MainGame:
         return text
 
     
-
+    #CALLED ON CLICKING A BUTTON
     def openit(self,(x,y)):
         if self.inmenu:
             if x > 400 and x < 600:
@@ -163,18 +172,21 @@ class MainGame:
                         self.player2 = "Vegeta"
                         self.mainloop = False
 
+    #RETURNS A TUPLE WITH USER-SELECTED CHARACTERS
     def getchars(self):
         return (self.player1,self.player2)
 
 
-                
+    #CALLS THE LOOP OF THE MAIN MENU 
     def menuloop(self):
         black = [0,0,0]
         if not pygame.mixer.get_busy():
             self.introsound.play()
+        
         while self.mainloop:
             if not pygame.mixer.get_busy():
                 self.introsound.play()
+            #MAIN SCREEN
             if self.inmenu:
                         
                 pygame.display.set_caption(str(self.clock.get_fps()))
@@ -210,7 +222,7 @@ class MainGame:
 
 
 
-                
+            #INSTRUCTION SCREEN
             if self.ininstr:
                 manual = "Welcome to KI Fighters- A 2-player 2D topdown fighter game. You get to choose between Goku and Vegito and fight each other in a duel unto death. Player 1 uses W, A, S and D to move up, left, down and right respectively. R is to Punch and T enables a long range energy blast. Player 2 will have the directional keys for movements, and P to punch and O for the energy blast.First player down to zero HP wins! Keep in mind that using KI blasts drains your energy bar! Thanks and enjoy"
                 pygame.display.set_caption(str(self.clock.get_fps()))
@@ -236,7 +248,7 @@ class MainGame:
 
 
 
-                
+            #START GAME SCREEN
             if self.instart:
                 pygame.display.set_caption(str(self.clock.get_fps()))
                 self.gamedisplay.fill(black)

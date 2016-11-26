@@ -61,7 +61,7 @@ class Map:#Generates a map with a random number of trees at random locations
 				j+=50
 			i+=50
 			j=0
-	def blitobstacles(self,wind):
+	def blitobstacles(self,wind):#BLITS THE TREES AS OPAQUE OBSTACLES
 		i=0
 		j=0
 		x=0
@@ -77,7 +77,7 @@ class Map:#Generates a map with a random number of trees at random locations
 
 
 class Goku:
-	def getImgLib(self):
+	def getImgLib(self):#GATHERS ALL THE IMAGES FROM THE SPRITESHEET AND PUTS EM IN A LIST
 		lib=[]
 		for i in range(125):
 			lib.append(pygame.image.load("Images/Goku"+str(i)+".png").convert_alpha())

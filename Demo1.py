@@ -1,33 +1,58 @@
+
+
+
+
+
+
+
+
+##############################################################################
+##############################################################################
+###############################  MAIN CLASS  #################################
+##############################################################################
+##############################################################################
+
+###########################  IMPORTING MODULES  ##############################
 import pygame
 from gameclass import *
 from charclass import *
 pygame.init()
 pygame.mixer.init()
 
+##############################################################################
+########################### PREDEFINED FUNCTIONS #############################
+##############################################################################
 white = [255,255,255]
-def message(msg,x,y):
+def message(msg,x,y):# Blits a message(msg) onto the screen
         text=font.render(msg,True,[0,0,0])
         gameDisplay.blit(text,(x,y))
-while True:
-        g=MainGame()
-        g.menuloop()
-        (c1,c2) = g.getchars()
-        pygame.mixer.init()
+
+##############################################################################
+##############################################################################        
+################################# MAINLOOP ###################################
+##############################################################################
+##############################################################################
+while True:#GAME LOOP (Helps the game run until user quits)
+        g=MainGame()#MAIN MENU OBJECT
+        g.menuloop()#MAIN MENU LOOP
+        (c1,c2) = g.getchars()# GETS THE CHARACTERS SELECTED BY USERS
+        pygame.mixer.init()#INITIALIZING SOUND MODULE
         introsound = pygame.mixer.Sound(file="Sounds/FightSong.wav")
         introsound.play()
-        gameDisplay = pygame.display.set_mode((1000,1000))
+        gameDisplay = pygame.display.set_mode((1000,1000))#CREATES A NEW DISPLAY
         pygame.display.set_caption("Welcome")
-        clock = pygame.time.Clock()
-        gameExit = False
-        font=pygame.font.SysFont(None,36)
+        clock = pygame.time.Clock()#INITIALIZES A NEW CLOCK OBJECT
+        gameExit = False#MAINGAME EXIT CONDITION
+        font=pygame.font.SysFont(None,36)#FONT INITIALIZED
 
 
-        map1=Map()
+        map1=Map()#OPENS A NEW INSTANCE OF A RANDOMLY GENERATED MAP
         listofki=[]
         winner = None
 
 
-
+        #THIS BLOCK OPENS THE OBJECTS OF THE CHARACTERS AS THEY HAVE
+        #BEEN SELECTED BY THE USERS
         if c1 =="Goku":
                 char1=Goku(gameDisplay,200,200,map1,1)
         else:
@@ -42,10 +67,13 @@ while True:
 
 
 
-
+        #MAINGAME LOOP
         while not gameExit:
+                #RESTARTS SOUND AFTER IT ENDS
                 if not pygame.mixer.get_busy():
                         introsound.play()
+
+                #DAMAGE REDUCTION DUE TO PUNCHES
                 if char1.state == "PUNCH":
                         direc=char1.getreststate()
                         if direc == "UP":
@@ -76,7 +104,7 @@ while True:
                                         char1.health -= 2
 
                                 
-                                
+                #DAMAGE REDUCTION DUE TO KI BLASTS(ENERGY BLASTS)
                 if char1.state == "KI":
                         char1.kiamt -= 20
                         if char1.state1 == None:
@@ -108,7 +136,8 @@ while True:
                         listofki.append(Ki(char2.X,char2.Y,state,gameDisplay))
 
                 
-                                
+                #MAKES SURE CHARACTERS ARE NON-COLLIDEABLE WITH OPAQUE
+                #MAP OBJECTS        
                 if char2.Map.checkcollision((char2.X+char2.dx,char2.Y+char2.dy)):
                         if char2.state=="UP" or char2.state=="DOWN":
                                 char2.dy=-char2.dy
@@ -139,7 +168,9 @@ while True:
                 else:
                         char1.Y+=char1.dy
                         char1.X+=char1.dx
-                                                
+
+
+                #CALLING THE BLITS   
                 gameDisplay.fill(white)
                 map1.blitmap(gameDisplay)
                 char1.update()
@@ -149,7 +180,8 @@ while True:
                 pygame.draw.rect(char1.window,char1.kicolor,(char1.kiloc[0],char1.kiloc[1],char1.kiamt,20))
                 pygame.draw.rect(char2.window,char2.healthcolor,(char2.hloc[0],char2.hloc[1],char2.health,20))
                 pygame.draw.rect(char2.window,char2.kicolor,(char2.kiloc[0],char2.kiloc[1],char2.kiamt,20))
-                
+
+                #CHANGES CURRENT PICTURE OF ANIMATION OF BOTH CHARACTERS
                 char2.animate()
                 char1.animate()
                 for i in listofki:
@@ -173,6 +205,8 @@ while True:
                         gameExit = True
                 clock.tick(8)
                 pygame.display.flip()
+
+        #INITIATES GAME OVER SCREEN
         gameOver = True
         gameDisplay = pygame.display.set_mode((400,400))
         pygame.display.set_caption("CONGRATULATIONS: "+winner)
@@ -186,7 +220,7 @@ while True:
                                 gameOver = False
                 pygame.display.flip()
                 clock.tick(60)
-        win.stop()
+        win.stop()#STOPS MUSIC
                 
                 
         
