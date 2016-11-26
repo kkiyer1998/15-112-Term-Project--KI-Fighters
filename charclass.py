@@ -159,6 +159,16 @@ class Goku:
 
 
 	def animate(self):#Called every frame
+                if self.curpic >140:
+                        reststate = self.getreststate()
+                        if reststate == "UP":
+                                self.curpic = self.uppic
+                        elif reststate == "DOWN":
+                                self.curpic = self.downpic
+                        elif reststate == "LEFT":
+                                self.curpic = self.lpic
+                        else:
+                                self.curpic = self.rpic
 		if self.state != None  and  self.state != "PUNCH"  and  self.state != "KI":
 			if self.curpic > 36:
 				if self.state == "UP":
@@ -425,11 +435,9 @@ class Ki:
                         self.hascollided = True
 			return Map
                 if (self.x>=p1.X and self.x<=p1.X+32) and (self.y>=p1.Y and self.y<=p1.Y+32):
-                        print "hey", self.x,p2.X,"sup", self.y, p2.Y
                         self.hascollided = True
                         return p1
                 if (self.x>=p2.X and self.x<=p2.X+32) and (self.y>=p2.Y and self.y<=p2.Y+32):
-                        print "hey", self.x,p2.X,"sup", self.y, p2.Y
                         self.hascollided = True
                         return p2
 		return False
@@ -540,6 +548,16 @@ class Vegeta:
 
                 
 	def animate(self):#Called every frame
+                if self.curpic >140:
+                        reststate = self.getreststate()
+                        if reststate == "UP":
+                                self.curpic = self.uppic
+                        elif reststate == "DOWN":
+                                self.curpic = self.downpic
+                        elif reststate == "LEFT":
+                                self.curpic = self.lpic
+                        else:
+                                self.curpic = self.rpic
 		if self.state != None  and  self.state != "PUNCH"  and  self.state != "KI":
 			if self.curpic > 28:
 				if self.state == "UP":
