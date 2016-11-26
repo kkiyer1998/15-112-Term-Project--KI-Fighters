@@ -171,11 +171,9 @@ class MainGame:
     def menuloop(self):
         black = [0,0,0]
         if not pygame.mixer.get_busy():
-            print "YO"
             self.introsound.play()
         while self.mainloop:
             if not pygame.mixer.get_busy():
-                print "YO"
                 self.introsound.play()
             if self.inmenu:
                         
@@ -226,8 +224,9 @@ class MainGame:
                     if evt.type == pygame.MOUSEMOTION:
                         self.lightitup(evt.pos)
                     if evt.type == pygame.QUIT  or  (evt.type == pygame.KEYDOWN and evt.key == pygame.K_ESCAPE):
-                        self.ininstr = False
-                        self.mainloop = False
+                        pygame.mixer.quit()
+                        pygame.quit()
+                        quit()
                     if evt.type == pygame.MOUSEBUTTONUP:
                         self.openit(evt.pos)
 

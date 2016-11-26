@@ -1,8 +1,10 @@
 
 from PIL import Image
-
-for i in range(6):
-    img = Image.open("Images/kiblast.png")
-    img.convert("RGBA")
-    img = img.crop((i*20,0,i*20+20,20))
-    img.save("Images/ki"+str(i)+".png")
+x=0
+for i in range(12):
+    for j in range(12):
+        img = Image.open("Gogeta.png").convert("RGBA")
+        print img.mode
+        img = img.crop((j*32,i*32,j*32+32,i*32+32))
+        img.save("Images/vegeta"+str(x)+".png")
+        x+=1
