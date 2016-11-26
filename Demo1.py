@@ -23,6 +23,7 @@ def message(msg):
 started=2
 map1=Map()
 listofki=[]
+winner = None
 char1=Goku(gameDisplay,100,100,map1,1)
 char2=Goku(gameDisplay,200,200,map1,2)
 while not gameExit:
@@ -33,26 +34,36 @@ while not gameExit:
         if started==2:
                 if char1.state == "KI":
                         char1.kiamt -= 20
-                        if char1.state1 == "UP":
-                                listofki.append(Ki(char1.X,char1.Y-5,"UP"))
-                        elif char1.state1 == "DOWN":
-                                listofki.append(Ki(char1.X,char1.Y+5,"DOWN"))
-                        elif char1.state1 == "RIGHT":
-                                listofki.append(Ki(char1.X+5,char1.Y,"RIGHT"))
-                        elif char1.state1 == "LEFT":
-                                listofki.append(Ki(char1.X-5,char1.Y,"LEFT"))
+                        if char1.state1 == None:
+                                if char1.curpic == char1.uki:
+                                        state = "UP"
+                                elif char1.curpic == char1.dki:
+                                        state = "DOWN"
+                                elif char1.curpic == char1.rki:
+                                        state = "RIGHT"
+                                else:
+                                        state = "LEFT"
+                        else:
+                                state = char1.state1
+                        listofki.append(Ki(char1.X,char1.Y,state,gameDisplay))
+                        
                 if char2.state == "KI":
                         char2.kiamt -= 20
-                        if char2.state1 == "UP":
-                                listofki.append(Ki(char2.X,char2.Y-5,"UP"))
-                        elif char2.state1 == "DOWN":
-                                listofki.append(Ki(char2.X,char2.Y+5,"DOWN"))
-                        elif char2.state1 == "RIGHT":
-                                listofki.append(Ki(char2.X+5,char2.Y"RIGHT"))
-                        elif char2.state1 == "LEFT":
-                                listofki.append(Ki(char2.X-5,char2.Y,"LEFT"))
-                        
-                                                
+                        listofki.append(Ki(char2.X,char2.Y,char2.state1,gameDisplay))
+                        if char2.state1 == None:
+                                if char2.curpic == char2.uki:
+                                        state = "UP"
+                                elif char2.curpic == char2.dki:
+                                        state = "DOWN"
+                                elif char2.curpic == char2.rki:
+                                        state = "RIGHT"
+                                else:
+                                        state = "LEFT"
+                        else:
+                                state = char2.state1
+                        listofki.append(Ki(char2.X,char2.Y,state,gameDisplay))
+
+                
                                 
                 if char2.Map.checkcollision((char2.X+char2.dx,char2.Y+char2.dy)):
                         if char2.state=="UP" or char2.state=="DOWN":
@@ -92,6 +103,11 @@ while not gameExit:
                 map1.blitobstacles(gameDisplay)
                 char2.animate()
                 char1.animate()
+                for i in listofki:
+                        x = i.checkcollisions(map1,char1,char2)
+                        if not (x == False or x == map1):
+                                x.health -= 15
+                        i.animate()
                 for evt in pygame.event.get():
                         if evt.type == pygame.QUIT:
                                 gameExit=True
@@ -100,6 +116,12 @@ while not gameExit:
         elif started==0:
                 gameDisplay.fill(white)
                 gameDisplay.blit(menubg,(0,0))
+        if char1.health <= 0:
+                winner = char2
+                gameExit = True
+        if char2.health <= 0:
+                winner = char1
+                gameExit = True
         clock.tick(8)
         pygame.display.flip()
 

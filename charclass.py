@@ -28,7 +28,7 @@ class Map:#Generates a map with a random number of trees at random locations
 			self.treelocs.append((random.randint(0,20),random.randint(0,20)))
 		self.initmap()
 	def checkcollision(self,(x,y)):#For collision handling
-                if x>1000 or x<0 or y>1000 or y<0:
+                if x>=1000 or x<=0 or y>=1000 or y<=0:
                         return True
 		x=x/50
 		y=y/50
@@ -381,19 +381,60 @@ class Goku:
 					self.state1 = None
 				self.dx = 0
 class Ki:
-        def __init__(self,x,y,direc):
+        def __init__(self,x,y,direc,window):
+                self.images = []
+                for i in range(6):
+                        self.images.append(pygame.image.load("Images/ki"+str(i)+".png").convert_alpha())
+                self.hascollided = False
+                self.end = False
+                self.curpic = 0
                 self.x = x
                 self.y = y
                 self.dx = 0
                 self.dy = 0
+                self.wnd = window
+                self.direc = direc
                 if direc == "UP":
+                        self.y -= 5 
                         self.dy = -15
                 elif direc == "DOWN":
+                        self.y += 38
                         self.dy = 15
                 elif direc == "RIGHT":
+                        self.x += 38
                         self.dx = 15
-                else:
+                elif direc == "LEFT":
+                        self.x -= 5
                         self.dx = -15
+                self.wnd.blit(self.images[0],(self.x,self.y))
+        def checkcollisions(self,Map,p1,p2):
+                x = self.x/50
+		y = self.y/50
+		if (x,y) in Map.treelocs:
+                        self.hascollided = True
+			return Map
+                if (self.x>=p1.X and self.x<=p1.X+32) and (self.y>=p1.Y and self.y<=p1.Y+32):
+                        self.hascollided = True
+                        return p1
+                if (self.x>=p2.X and self.x<=p2.X+32) and (self.y>=p2.Y and self.y<=p2.Y+32):
+                        self.hascollided = True
+                        return p2
+		return False
+                
+        def animate(self):
+                if self.hascollided:
+                        if not self.end:
+                                self.wnd.blit(self.images[5],(self.x,self.y))
+                                self.end = True
+                else:
+                        self.wnd.blit(self.images[self.curpic],(self.x,self.y))
+                self.x += self.dx
+                self.y += self.dy
+                if self.curpic < 3:
+                        self.curpic += 1
+                
+                
+                
                 
                 
                 
